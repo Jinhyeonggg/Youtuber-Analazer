@@ -1,3 +1,3 @@
-Invisible Random Timer 5 ~ 10 min
+Invisible Random Timer for Daydreaming
 =================================
 # Go here: https://jinhyeonggg.github.io/InvisibleTimer/

@@ -110,7 +110,7 @@
     <div id="speakerIcon" onclick="toggleAudio()">
       <i class="fas fa-volume-up"></i>
     </div>
-    <audio id="audioElement" src="jazz.mp3"></audio>
+    <audio id="audioElement" src="./sources/jazz.mp3"></audio>
     <div class="input-container">
       <input type="number" id="minTime" placeholder="min (minutes)">
       <input type="number" id="maxTime" placeholder="max (minutes)">
@@ -132,7 +132,7 @@
     </div>
     <div class="white-space"></div>
 
-    <audio id="audio" src="drum.mp3"></audio>
+    <audio id="audio" src="./sources/drum.mp3"></audio>
 
     <div id="disqus_thread"></div>
     <script>
@@ -155,7 +155,7 @@
     <script>
       const audioElement = document.getElementById('audioElement');
       audioElement.play();
-      let isPlaying = true;
+      let isPlaying = false;
 
       function toggleAudio() {
         if (isPlaying) {

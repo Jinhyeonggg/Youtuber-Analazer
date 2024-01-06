@@ -107,7 +107,6 @@
     <h1>Invisible Random Timer</h1>
   </div>
   <div id="speakerContainer">
-    <!-- 스피커 모양 아이콘을 나타내는 div -->
     <div id="speakerIcon" onclick="toggleAudio()">
       <i class="fas fa-volume-up"></i>
     </div>
@@ -158,17 +157,13 @@
       audioElement.play();
       let isPlaying = true;
 
-      // 오디오 상태를 토글하는 함수
       function toggleAudio() {
         if (isPlaying) {
-          // 현재 재생 중이라면 정지
           audioElement.pause();
         } else {
-          // 현재 정지 상태라면 재생
           audioElement.play();
         }
 
-        // 상태 업데이트
         isPlaying = !isPlaying;
       }
     </script>
@@ -228,8 +223,6 @@
         document.getElementById('timePassed').textContent = `Time Passed: ${formatTime(elapsedTime)}`;
 
         if (elapsedTime >= endTime - startTime) {
-          audioElement.pause();
-          isPlaying = false;
           playAudio(); // Play audio when the timer is up
           // Stop updating elapsed time and audio playback
           clearInterval(timer);

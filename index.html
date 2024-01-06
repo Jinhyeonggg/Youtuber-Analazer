@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
     body {
       font-family: 'Quicksand', Arial, sans-serif;
@@ -54,10 +55,9 @@
 
     .timer-Info-Box {
       display: flex;
-      align-items: center;
       justify-content: center;
     }
-    
+
     #timer-info {
       /* display: none; */
       visibility: hidden;
@@ -82,6 +82,15 @@
     nav a:hover {
       background-color: #555;
     }
+
+    #speakerIcon {
+      cursor: pointer;
+      position: absolute;
+      top: 80px;
+      left: 30px;
+      font-size: 24px;
+      color: #333;
+    }
   </style>
   <title>Invisible Random Timer</title>
 </head>
@@ -97,128 +106,155 @@
   <div class="title">
     <h1>Invisible Random Timer</h1>
   </div>
-
-  <div class="input-container">
-    <input type="number" id="minTime" placeholder="min (minutes)">
-    <input type="number" id="maxTime" placeholder="max (minutes)">
-  </div>
-
-  <button id="startBtn" onclick="startTimer()">Start</button>
-  <button id="showBtn" onclick="showTime()" disabled>Show</button>
-  <button id="resetBtn" onclick="resetTimer()" disabled>Reset</button>
-
-  <div class="timer-Info-Box">
-    <div id="timer-info">
-      <h1>
-        <p id="timeSet">Time Set: </p>
-      </h1>
-      <h1>
-        <p id="timePassed">Time Passed: </p>
-      </h1>
+  <div id="speakerContainer">
+    <!-- 스피커 모양 아이콘을 나타내는 div -->
+    <div id="speakerIcon" onclick="toggleAudio()">
+      <i class="fas fa-volume-up"></i>
     </div>
-  </div>
-  <div class="white-space"></div>
+    <audio id="audioElement" src="jazz.mp3"></audio>
+    <div class="input-container">
+      <input type="number" id="minTime" placeholder="min (minutes)">
+      <input type="number" id="maxTime" placeholder="max (minutes)">
+    </div>
 
-  <audio id="audio" src="drum.mp3"></audio>
+    <button id="startBtn" onclick="startTimer()">Start</button>
+    <button id="showBtn" onclick="showTime()" disabled>Show</button>
+    <button id="resetBtn" onclick="resetTimer()" disabled>Reset</button>
 
-  <div id="disqus_thread"></div>
-  <script>
-    /**
-    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-    /*
-    var disqus_config = function () {
-    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function () { // DON'T EDIT BELOW THIS LINE
-      var d = document, s = d.createElement('script');
-      s.src = 'https://invisibletimer.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', +new Date());
-      (d.head || d.body).appendChild(s);
-    })();
-  </script>
-  <script>
-    let timer;
-    let startTime;
-    let endTime;
+    <div class="timer-Info-Box">
+      <div id="timer-info">
+        <h1>
+          <p id="timeSet">Time Set: </p>
+        </h1>
+        <h1>
+          <p id="timePassed">Time Passed: </p>
+        </h1>
+      </div>
+    </div>
+    <div class="white-space"></div>
 
-    function startTimer() {
-      var minTime = document.getElementById("minTime").value;
-      var maxTime = document.getElementById("maxTime").value;
-      if (minTime === "" || isNaN(minTime) || maxTime === "" || isNaN(maxTime) || minTime > maxTime) {
-        alert("Please enter valid time!");
-        return;
+    <audio id="audio" src="drum.mp3"></audio>
+
+    <div id="disqus_thread"></div>
+    <script>
+      /**
+      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+      /*
+      var disqus_config = function () {
+      this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      };
+      */
+      (function () { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://invisibletimer.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script>
+      const audioElement = document.getElementById('audioElement');
+      audioElement.play();
+      let isPlaying = true;
+
+      // 오디오 상태를 토글하는 함수
+      function toggleAudio() {
+        if (isPlaying) {
+          // 현재 재생 중이라면 정지
+          audioElement.pause();
+        } else {
+          // 현재 정지 상태라면 재생
+          audioElement.play();
+        }
+
+        // 상태 업데이트
+        isPlaying = !isPlaying;
       }
-      const randomTime = getRandomTime(minTime, maxTime);
-      startTime = new Date().getTime();
-      endTime = startTime + randomTime;
+    </script>
+    <script>
+      let timer;
+      let startTime;
+      let endTime;
 
-      document.getElementById('timeSet').textContent = `Time Set: ${formatTime(randomTime)}`;
-      // document.getElementById('timer-info').style.display = 'none'; // Hide initially
+      function startTimer() {
+        resetTimer()
+        var minTime = document.getElementById("minTime").value;
+        var maxTime = document.getElementById("maxTime").value;
+        if (minTime === "" || isNaN(minTime) || maxTime === "" || isNaN(maxTime) || minTime > maxTime) {
+          alert("Please enter valid time!");
+          return;
+        }
+        const randomTime = getRandomTime(minTime, maxTime);
+        startTime = new Date().getTime();
+        endTime = startTime + randomTime;
 
-      document.getElementById('startBtn').style.backgroundColor = '#8BC34A'; // Change color to green
+        document.getElementById('timeSet').textContent = `Time Set: ${formatTime(randomTime)}`;
+        // document.getElementById('timer-info').style.display = 'none'; // Hide initially
 
-      document.getElementById('showBtn').disabled = false;
-      document.getElementById('resetBtn').disabled = false;
+        document.getElementById('startBtn').style.backgroundColor = '#8BC34A'; // Change color to green
 
-      updateRealTime();
-    }
+        document.getElementById('showBtn').disabled = false;
+        document.getElementById('resetBtn').disabled = false;
 
-    function showTime() {
-      clearInterval(timer);
-      document.getElementById('timer-info').style.visibility = 'visible'; // Show after clicking "Show" button
-      updateElapsedTime(); // Update elapsed time immediately
+        updateRealTime();
+      }
 
-      // Continue updating elapsed time in real-time
-      timer = setInterval(updateElapsedTime, 1000);
-    }
-
-    function resetTimer() {
-      clearInterval(timer);
-      document.getElementById('timer-info').style.visibility = 'hidden';
-
-      document.getElementById('startBtn').style.backgroundColor = ''; // Reset color
-
-      document.getElementById('showBtn').disabled = true;
-      document.getElementById('resetBtn').disabled = true;
-    }
-
-    function updateRealTime() {
-      timer = setInterval(updateElapsedTime, 1000);
-    }
-
-    function updateElapsedTime() {
-      const elapsedTime = getElapsedTime();
-      document.getElementById('timePassed').textContent = `Time Passed: ${formatTime(elapsedTime)}`;
-
-      if (elapsedTime >= endTime - startTime) {
-        playAudio(); // Play audio when the timer is up
-        // Stop updating elapsed time and audio playback
+      function showTime() {
         clearInterval(timer);
+        document.getElementById('timer-info').style.visibility = 'visible'; // Show after clicking "Show" button
+        updateElapsedTime(); // Update elapsed time immediately
+
+        // Continue updating elapsed time in real-time
+        timer = setInterval(updateElapsedTime, 1000);
       }
-    }
 
-    function getElapsedTime() {
-      return Math.floor((new Date().getTime() - startTime) / 1000);
-    }
+      function resetTimer() {
+        clearInterval(timer);
+        document.getElementById('timer-info').style.visibility = 'hidden';
 
-    function playAudio() {
-      const audio = document.getElementById('audio');
-      audio.play();
-    }
+        document.getElementById('startBtn').style.backgroundColor = ''; // Reset color
 
-    function getRandomTime(min, max) {
-      return Math.floor(60 * Math.random() * (max - min) + 60 * min);
-    }
+        document.getElementById('showBtn').disabled = true;
+        document.getElementById('resetBtn').disabled = true;
+      }
 
-    function formatTime(totalSeconds) {
-      const minutes = Math.floor(totalSeconds / 60);
-      const seconds = totalSeconds % 60;
-      return `${minutes}min ${seconds}sec`;
-    }
-  </script>
+      function updateRealTime() {
+        timer = setInterval(updateElapsedTime, 1000);
+      }
+
+      function updateElapsedTime() {
+        const elapsedTime = getElapsedTime();
+        document.getElementById('timePassed').textContent = `Time Passed: ${formatTime(elapsedTime)}`;
+
+        if (elapsedTime >= endTime - startTime) {
+          audioElement.pause();
+          isPlaying = false;
+          playAudio(); // Play audio when the timer is up
+          // Stop updating elapsed time and audio playback
+          clearInterval(timer);
+        }
+      }
+
+      function getElapsedTime() {
+        return Math.floor((new Date().getTime() - startTime) / 1000);
+      }
+
+      function playAudio() {
+        const audio = document.getElementById('audio');
+        audio.play();
+      }
+
+      function getRandomTime(min, max) {
+        return Math.floor(60 * Math.random() * (max - min) + 60 * min);
+      }
+
+      function formatTime(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes}min ${seconds}sec`;
+      }
+    </script>
 
 </body>
 

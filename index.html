@@ -154,7 +154,7 @@
     </script>
     <script>
       const audioElement = document.getElementById('audioElement');
-      audioElement.play();
+      audioElement.pause();
       let isPlaying = false;
 
       function toggleAudio() {
@@ -174,8 +174,11 @@
 
       function startTimer() {
         resetTimer()
-        var minTime = document.getElementById("minTime").value;
-        var maxTime = document.getElementById("maxTime").value;
+        var minTime = +document.getElementById("minTime").value;
+        var maxTime = +document.getElementById("maxTime").value;
+        console.log(minTime);
+        console.log(maxTime);
+        console.log(typeof(maxTime));
         if (minTime === "" || isNaN(minTime) || maxTime === "" || isNaN(maxTime) || minTime > maxTime) {
           alert("Please enter valid time!");
           return;

@@ -74,7 +74,7 @@ def get_top_n_contents(numVideos=5, numComments=15, region_code='US'):
 if __name__ == '__main__':
     app = Flask(__name__)
     logging.basicConfig(level=logging.DEBUG)
-    CORS(app, origins='https://jinhyeonggg.github.io')
+    CORS(app)
 
     @app.route('/', methods=['GET'])
     def response():

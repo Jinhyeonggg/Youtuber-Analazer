@@ -62,17 +62,21 @@ def get_top_n_contents(numVideos=5, numComments=15, region_code='US'):
         results.append(result)
     return results
 
-app = Flask(__name__)
-CORS(app)
 
-@app.route('/', methods=['GET'])
-def response():
-    top5contents = get_top_n_contents(region_code='KR')
-    return jsonify(top5contents)
+
+
     
 # @app.route('/<path:filename>')
 # def static_files(filename):
 #     return send_from_directory('.', filename)
 
 if __name__ == '__main__':
+    app = Flask(__name__)
+    CORS(app)
+
+    @app.route('/', methods=['GET'])
+    def response():
+        top5contents = get_top_n_contents(region_code='KR')
+        return jsonify(top5contents)
+    
     app.run(debug=True)

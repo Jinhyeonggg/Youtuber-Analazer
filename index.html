@@ -163,9 +163,9 @@
       }
 
       audioElement.addEventListener('ended', function () {
-        audio.currentTime = 0;
+        audioElement.currentTime = 0;
         if (isPlaying) {
-          audio.play();
+          audioElement.play();
         }
       })
     </script>

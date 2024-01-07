@@ -65,7 +65,7 @@ def get_top_n_contents(numVideos=5, numComments=15, region_code='US'):
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/get_youtube_data', methods=['GET'])
+@app.route('/', methods=['GET'])
 def response():
     top5contents = get_top_n_contents(region_code='KR')
     return jsonify(top5contents)

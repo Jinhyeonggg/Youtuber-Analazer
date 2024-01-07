@@ -130,7 +130,7 @@
     <script>
         async function showNews() {
             const newsContainer = document.getElementById('news-container')
-            const response = await fetch('http://127.0.0.1:5000/get_data');
+            const response = await fetch('https://jinhyeonglee.pythonanywhere.com/');
             const datas = await response.json();
             datas.forEach(data => {
                 const title = data.title;

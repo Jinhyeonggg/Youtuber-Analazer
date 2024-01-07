@@ -3,6 +3,7 @@ import googleapiclient.errors
 from googleapiclient.errors import HttpError
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
+import logging
 
 api_service_name = 'youtube'
 api_version = "v3"
@@ -72,11 +73,13 @@ def get_top_n_contents(numVideos=5, numComments=15, region_code='US'):
 
 if __name__ == '__main__':
     app = Flask(__name__)
-    CORS(app)
+    logging.basicConfig(level=logging.DEBUG)
+    CORS(app, origins='https://jinhyeonggg.github.io')
 
     @app.route('/', methods=['GET'])
     def response():
         top5contents = get_top_n_contents(region_code='KR')
+        app.logger.info("dd")
         return jsonify(top5contents)
     
     app.run(debug=True)

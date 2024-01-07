@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Nanum Gothic', 'Quicksand', Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 40px;
+            background-color: #66c96a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'QuickSand';
+        }
+
+        nav {
+            background-color: #333;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        #newsList {
+            display: none;
+            /* 초기에는 리스트를 숨깁니다. */
+        }
+
+        .newsItem {
+            float: left;
+            margin-right: 10px;
+        }
+
+        .clearFloat {
+            clear: both;
+        }
+        
+        #showNews {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .news-box {
+            margin: auto;
+            justify-content: center;
+            border: 5px solid #ccc;
+            border-radius: 5%;
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 650px; /* 템플릿의 너비를 조절할 수 있습니다. */
+            box-sizing: border-box;
+            font-family: 'QuickSand', 'Nanum Gothic', sans-serif;
+            line-height: 1.3em;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .channelTitle {
+            font-size: 17px;
+            color: #555;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .comments {
+            font-size: 14px;
+            color: #333;
+            text-align: left;
+        }
+
+        .comments li {
+            list-style-type: circle;
+            margin-left: 20px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+    <title>Jinhyeong's WebSite</title>
+</head>
+
+<body>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <!-- <div class="title">
+        <h1>Jinhyeong's WebSite</h1>
+    </div> -->
+
+    <button id="showNews" onclick="showNews()">What's New today?</button>
+    <div id="news-container"></div>
+
+    <script>
+        async function showNews() {
+            const newsContainer = document.getElementById('news-container')
+            const response = await fetch('http://127.0.0.1:5000/get_data');
+            const datas = await response.json();
+            datas.forEach(data => {
+                const title = data.title;
+                const channelTitle = data.channelTitle;
+                const comments = data.comments;
+                const tags = data.tags;
+                console.log(comments);
+                const template = document.createElement('div');
+                template.className = 'news-box';
+                template.innerHTML = `
+                    <div class="title">${title}</div>
+                    <div class="channelTitle">Channel: ${channelTitle}</div>
+                    <ul class="comments">
+                        ${comments.map(comment => `<li>${comment}</li>`).join('')}
+                    </ul>
+                `;
+                newsContainer.appendChild(template);
+            })
+        }
+    </script>
+</body>
+
+</html>

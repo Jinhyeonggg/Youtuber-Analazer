@@ -1,3 +1,3 @@
 Invisible Random Timer for Daydreaming
 =================================
-# Go here: https://jinhyeonggg.github.io/InvisibleTimer/
+# Go here: https://jinhyeonggg.github.io/DayDreaming/

@@ -99,7 +99,7 @@
   </nav>
 
   <div class="title">
-    <h1>Invisible Random Timer</h1>
+    <h1>Enjoy Daydreaming</h1>
   </div>
   <div id="speakerContainer">
     <div id="speakerIcon" onclick="toggleAudio()">
@@ -161,6 +161,13 @@
 
         isPlaying = !isPlaying;
       }
+
+      audioElement.addEventListener('ended', function () {
+        audio.currentTime = 0;
+        if (isPlaying) {
+          audio.play();
+        }
+      })
     </script>
     <script>
       let timer;
@@ -173,8 +180,8 @@
         var maxTime = +document.getElementById("maxTime").value;
         console.log(minTime);
         console.log(maxTime);
-        console.log(typeof(maxTime));
-        if (minTime === "" || isNaN(minTime) || maxTime === "" || isNaN(maxTime) || minTime > maxTime) {
+        console.log(typeof (maxTime));
+        if (minTime === "" || isNaN(minTime) || maxTime === "" || isNaN(maxTime) || minTime > maxTime || (minTime == 0 && maxTime == 0)) {
           alert("Please enter valid time!");
           return;
         }

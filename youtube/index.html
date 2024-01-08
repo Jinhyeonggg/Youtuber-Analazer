@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
@@ -23,9 +23,10 @@
 
         button {
             padding: 10px 20px;
-            font-size: 40px;
-            background-color: #66c96a;
-            color: white;
+            font-size: 2.5em;
+            width: 35%;
+            background-color: #6b6b6d;
+            color: rgb(255, 255, 255);
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -51,6 +52,28 @@
             background-color: #555;
         }
 
+        .title {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            text-align: center;
+            text-decoration: none;
+            background-color: #b9ddba;
+            /* 배경색 */
+            color: #000;
+            /* 텍스트 색상 */
+            border-radius: 5px;
+            /* 둥근 테두리 */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            /* 마우스 오버 시 색상 전환 효과 */
+
+            /* 마우스 오버 시 배경색 변경 */
+            &:hover {
+                background-color: #90ce93;
+            }
+        }
+
         #newsList {
             display: none;
             /* 초기에는 리스트를 숨깁니다. */
@@ -64,20 +87,26 @@
         .clearFloat {
             clear: both;
         }
-        
+
         #showNews {
             margin-top: 30px;
             margin-bottom: 30px;
+            transition: background-color 0.3s;
+            &:hover {
+                background-color: #494949;
+            }
         }
+
 
         .news-box {
             margin: auto;
             justify-content: center;
             border: 5px solid #ccc;
-            border-radius: 5%;
+            border-radius: 2%;
             padding: 10px;
             margin-bottom: 20px;
-            width: 650px; /* 템플릿의 너비를 조절할 수 있습니다. */
+            width: 70%;
+            /* 템플릿의 너비를 조절할 수 있습니다. */
             box-sizing: border-box;
             font-family: 'QuickSand', 'Nanum Gothic', sans-serif;
             line-height: 1.3em;
@@ -108,6 +137,20 @@
             margin-top: 5px;
             margin-bottom: 5px;
         }
+
+        #loading-container {
+            position: relative;
+        }
+
+        #loading-message {
+            font-family: 'QuickSand';
+            position: absolute;
+            display: none;
+            color: #3d3d3d;
+            margin-left: 20px;
+            font-size: 1.5em;
+            top: 38%;
+        }
     </style>
     <title>Jinhyeong's WebSite</title>
 </head>
@@ -117,38 +160,89 @@
         <a href="../index.html">Home</a>
         <a href="#">News</a>
         <a href="#">Services</a>
-        <a href="#">Contact</a>
     </nav>
 
     <!-- <div class="title">
         <h1>Jinhyeong's WebSite</h1>
     </div> -->
 
-    <button id="showNews" onclick="showNews()">What's New today?</button>
+    <div id="loading-container">
+        <button id="showNews" onclick="showNews()">What's New today?</button>
+        <span id="loading-message">Loading...</span>
+    </div>
+
     <div id="news-container"></div>
 
     <script>
+        // async function showNews() {
+        //     const baseUrl = 'http://127.0.0.1:5000';
+        //     const params = {
+        //         key1: 1,
+        //         key2: 4,
+        //     };
+        //     // URL에 파라미터 추가
+        //     const urlWithParams = new URL(baseUrl);
+        //     urlWithParams.search = new URLSearchParams(params).toString();
+
+        //     // GET 요청 보내기
+        //     const response = await fetch(urlWithParams);
+        //     const datas = await response.json();
+        //     console.log(datas);
+        // }
+
         async function showNews() {
-            const newsContainer = document.getElementById('news-container')
-            const response = await fetch('https://port-0-flask-1fk9002blr3j4h63.sel5.cloudtype.app/');
+            document.getElementById("showNews").disabled = true;
+            const newsContainer = document.getElementById('news-container');
+            
+            var newsBoxes = document.querySelectorAll('.news-box');
+            newsBoxes.forEach(function(newsBox) {
+                newsBox.remove();
+            });
+
+            const loadingMessage = document.getElementById('loading-message');
+            loadingMessage.style.display = 'inline';
+
+            const baseUrl = 'https://port-0-flask-1fk9002blr3j4h63.sel5.cloudtype.app/';
+            const params = {
+                key1: 1,
+                key2: 4,
+            };
+            const urlWithParams = new URL(baseUrl);
+            urlWithParams.search = new URLSearchParams(params).toString();
+            const response = await fetch(urlWithParams);
             const datas = await response.json();
+
+
+
             datas.forEach(data => {
                 const title = data.title;
                 const channelTitle = data.channelTitle;
                 const comments = data.comments;
                 const tags = data.tags;
+                const hyperlink = data.hyperlink;
+                console.log(hyperlink)
                 console.log(comments);
                 const template = document.createElement('div');
                 template.className = 'news-box';
                 template.innerHTML = `
-                    <div class="title">${title}</div>
+                    <a href="#" id="linkButton${hyperlink}" class="title">${title}</a>
                     <div class="channelTitle">Channel: ${channelTitle}</div>
                     <ul class="comments">
                         ${comments.map(comment => `<li>${comment}</li>`).join('')}
                     </ul>
                 `;
                 newsContainer.appendChild(template);
+
+                document.getElementById('linkButton'.concat('', hyperlink)).addEventListener('click', function () {
+                    // 동적으로 설정할 링크 주소를 변수에서 가져와서 href 속성 설정
+                    this.href = hyperlink;
+                });
             })
+
+            loadingMessage.style.display = 'none';
+            document.getElementById('showNews').textContent = 'Update!';
+
+            document.getElementById("showNews").disabled = false;
         }
     </script>
 </body>

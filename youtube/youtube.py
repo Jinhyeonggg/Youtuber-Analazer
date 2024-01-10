@@ -13,27 +13,35 @@ youtube = googleapiclient.discovery.build(
     api_service_name, api_version, developerKey=DEVELOPER_KEY
 )
     
-def get_top_n_videos(numVidoes, region_code='KR'):
-    request = youtube.videos().list(
-        part='snippet',
-        chart='mostPopular',
-        regionCode=region_code,
-        maxResults=100
-    )
+def get_top_n_videos(categoryId, numVidoes, region_code='KR'):
+    if categoryId is not None:
+        request = youtube.videos().list(
+            part='snippet',
+            chart='mostPopular',
+            regionCode=region_code,
+            maxResults=50,
+            videoCategoryId=categoryId
+        )
+    else: 
+        request = youtube.videos().list(
+            part='snippet',
+            chart='mostPopular',
+            regionCode=region_code,
+            maxResults=50,
+        )
 
     response = request.execute()
-    print(len(response['items']))
     results = []
-    randomList = random.sample(range(0, 100), numVidoes)
-    print(randomList)
+    randomList = random.sample(range(0, 50), numVidoes)
     for idx, item in enumerate(response['items']):
         if idx not in randomList:
             continue
         snippet = item['snippet']
-
-        print(snippet['title'])
+        # a = {"videoId": item['id'], "title": snippet['title'], "channelTitle": snippet['channelTitle'],
+        #                 "publishedDate": snippet['publishedAt'], "tags": snippet['tags'] if snippet.get('tags') is not None else [], "thumbnailURL": snippet['thumbnails']['standard']['url']}
+        # print(a)
         results.append({"videoId": item['id'], "title": snippet['title'], "channelTitle": snippet['channelTitle'],
-                        "publishedDate": snippet['publishedAt'], "tags": snippet['tags'] if snippet.get('tags') is not None else []})
+                        "publishedDate": snippet['publishedAt'], "tags": snippet['tags'] if snippet.get('tags') is not None else [], "thumbnailURL": snippet['thumbnails']['standard']['url']})
     return results
 
 def get_top_n_comments(video_id, numComments):
@@ -53,8 +61,8 @@ def get_top_n_comments(video_id, numComments):
     except HttpError as e:
         return []
 
-def get_top_n_contents(numVideos, numComments, region_code='US'):
-    topNvideos = get_top_n_videos(numVideos, region_code)
+def get_top_n_contents(categoryId, numVideos, numComments, region_code='US'):
+    topNvideos = get_top_n_videos(categoryId, numVideos, region_code)
     results = []
     for video in topNvideos:
         videoId = video['videoId']
@@ -64,18 +72,31 @@ def get_top_n_contents(numVideos, numComments, region_code='US'):
             'channelTitle': video['channelTitle'],
             'tags': video['tags'],
             'comments': topNcomments,
-            'hyperlink': "https://www.youtube.com/watch?v=" + videoId
+            'hyperlink': "https://www.youtube.com/watch?v=" + videoId,
+            'thumbnailURL': video['thumbnailURL'],
         })
     return results
 
 app = Flask(__name__)
 CORS(app)
 
+categoryIds = {
+    'Game': '20',
+    'Music': '10',
+    'Entertainment': '24',
+    'Sports': '17',
+    'Comedy': '23'
+}
+
 @app.route('/', methods=['GET'])
 def response():
-    # a = request.args.get('key1')
-    # print(a)
-    top5contents = get_top_n_contents(numVideos=10, numComments=15, region_code='KR')
+    categoryParam = request.args.get('category')[10:]
+    if categoryIds.get(categoryParam):
+        categoryId = categoryIds[categoryParam]
+    else:
+        categoryId = None
+
+    top5contents = get_top_n_contents(categoryId=categoryId, numVideos=10, numComments=10, region_code='KR')
     return jsonify(top5contents)
 
 

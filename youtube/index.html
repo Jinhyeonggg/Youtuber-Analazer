@@ -21,11 +21,23 @@
     </nav>
 
     <div id="loading-container">
+        <div class="dropdown">
+            <button id="categoryButton">Select Category</button>
+            <div class="dropdown-content">
+                <a href="#" onclick="changeCategory('Game')">Game</a>
+                <a href="#" onclick="changeCategory('Music')">Music</a>
+                <a href="#" onclick="changeCategory('Entertainment')">Entertainment</a>
+                <a href="#" onclick="changeCategory('Sports')">Sports</a>
+                <a href="#" onclick="changeCategory('Comedy')">Comedy</a>
+            </div>
+        </div>
         <button id="showNews" onclick="showNews()">What's New today?</button>
-        <span id="loading-message">Loading...</span>
+        <!-- <h2 id="loading-message">Loading...</h2> -->
     </div>
 
-    <div id="news-container"></div>
+    <div id="news-container">
+        <div class="thumbnail"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 

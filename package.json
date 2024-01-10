@@ -1,0 +1,23 @@
+{
+  "name": "daydreaming",
+  "version": "1.0.0",
+  "description": "Just for Fun\r =================================\r # Go here: https://jinhyeonggg.github.io/DayDreaming/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jinhyeonggg/DayDreaming.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jinhyeonggg/DayDreaming/issues"
+  },
+  "homepage": "https://github.com/Jinhyeonggg/DayDreaming#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "figlet": "^1.7.0"
+  }
+}

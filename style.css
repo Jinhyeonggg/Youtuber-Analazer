@@ -1,0 +1,77 @@
+body {
+    font-family: 'Quicksand', Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.input-container {
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+button {
+    width: 20%;
+    height: 100px;
+    margin: 10px;
+    font-family: 'Quicksand';
+    padding: 10px 20px;
+    font-size: 40px;
+    background-color: #66c96a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.timer-Info-Box {
+    display: flex;
+    justify-content: center;
+}
+
+#timer-info {
+    /* display: none; */
+    visibility: hidden;
+    text-align: left;
+}
+
+nav {
+    background-color: #333;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #555;
+}
+
+#speakerIcon {
+    cursor: pointer;
+    position: absolute;
+    top: 80px;
+    left: 30px;
+    font-size: 24px;
+    color: #333;
+}

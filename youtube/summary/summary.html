@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>네비게이션 바 예제</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navigation">
+            <ul>
+                <li><a href="page1.html">페이지 1</a></li>
+                <li><a href="page2.html">페이지 2</a></li>
+                <li><a href="page3.html">페이지 3</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 본문 내용 -->
+    <main>
+        <div id="summary"></div>
+        <script>
+            // 부모 창으로부터 메시지 수신
+            window.addEventListener('message', function (event) {
+                // if (event.origin === 'https://breezebee.tistory.com') {
+                if (true) {
+                    var data = event.data;
+                    document.getElementById(summary).innerText = data;
+                    // data.param1와 data.param2에 전달된 파라미터가 있음
+                }
+            });
+
+        </script>>
+    </main>
+</body>
+
+</html>

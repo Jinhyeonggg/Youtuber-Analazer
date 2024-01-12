@@ -70,7 +70,7 @@ function changeCategory(category) {
 }
 
 async function info(videoId) {
-    document.getElementById(`info${videoId}`).textContent = "로딩중...";
+    document.getElementById(`info${videoId}`).textContent = "로딩중...\n10초 이상 소요되니 기다려주세요.";
     document.getElementById(`info${videoId}`).disabled = true;
     // const baseUrl = 'http://127.0.0.1:5000/info' 
     const baseUrl = 'https://port-0-flask-1fk9002blr3j4h63.sel5.cloudtype.app/info' 

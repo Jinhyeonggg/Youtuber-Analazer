@@ -207,16 +207,6 @@ nav a:hover {
     margin-bottom: 5px;
 }
 
-/* .thumbnailNchannel img.thumbnail {
-    width: 40%; 
-    max-width: 100%; 
-    height: auto; 
+.init {
+    margin-top: 1.5%
 }
-
-#thumbnailNchannelNcomments {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-    height: 30vh;
-} */

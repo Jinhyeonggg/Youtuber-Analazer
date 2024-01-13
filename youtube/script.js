@@ -1,3 +1,6 @@
+// var baseUrl = 'http://127.0.0.1:5000/';
+var baseUrl = 'https://port-0-flask-1fk9002blr3j4h63.sel5.cloudtype.app/' 
+
 async function showNews() {
     document.getElementById("showNews").disabled = true;
     document.getElementById("showNews").innerText = "Loading..."
@@ -10,9 +13,6 @@ async function showNews() {
 
     // const loadingMessage = document.getElementById('loading-message');
     // loadingMessage.style.display = 'inline';
-
-    // const baseUrl = 'http://127.0.0.1:5000';
-    const baseUrl = 'https://port-0-flask-1fk9002blr3j4h63.sel5.cloudtype.app/' 
 
     var category = document.getElementById('categoryButton').innerText;
 
@@ -32,6 +32,7 @@ async function showNews() {
         const comments = data.comments;
         const tags = data.tags;
         const hyperlink = data.hyperlink;
+        const channelId = data.channelId;
         
         const thumbnailURL = data.thumbnailURL;
 
@@ -44,12 +45,12 @@ async function showNews() {
                 <div class="thumbnailNchannel">
                     <img class="thumbnail" src=${thumbnailURL}>
                     <div class="channelTitle">Channel: ${channelTitle}</div>
-                    <button id="info${videoId}" onclick="info('${videoId}')">요약해줘!</button>
+                    <button id="info${videoId}" onclick="info('${videoId}')">요약해다오</button>
+                    <button id="opinion${channelId}" onclick="opinion('${videoId}', '${channelId}')">이 유튜버 여론 좀 알려다오..</button>
                 </div>
                 <ul class="comments">
                     ${comments.map(comment => `<li>${comment}</li>`).join('')}
                 </ul>
-                
             </div>
         `;
         newsContainer.appendChild(template);
@@ -72,20 +73,52 @@ function changeCategory(category) {
 async function info(videoId) {
     document.getElementById(`info${videoId}`).textContent = "로딩중...\n10초 이상 소요되니 기다려주세요.";
     document.getElementById(`info${videoId}`).disabled = true;
-    // const baseUrl = 'http://127.0.0.1:5000/info' 
-    const baseUrl = 'https://port-0-flask-1fk9002blr3j4h63.sel5.cloudtype.app/info' 
 
     const params = {
         videoId: videoId,
         requestType: 'summary',
     };
-    const urlWithParams = new URL(baseUrl);
+    const urlWithParams = new URL(baseUrl.concat('info'));
     urlWithParams.search = new URLSearchParams(params).toString();
+    
     const response = await fetch(urlWithParams);
     const data = await response.json();
     console.log(data.response);
 
     document.getElementById(videoId).querySelector('.comments').innerText = data.response;
     document.getElementById(`info${videoId}`).disabled = false;
-    document.getElementById(`info${videoId}`).textContent = "요약해줘!"
+    document.getElementById(`info${videoId}`).textContent = "요약해다오"
 }
+
+async function opinion(videoId, channelId) {
+    document.getElementById(`opinion${channelId}`).textContent = "로딩중...\n10초 이상 소요되니 기다려주세요.";
+    document.getElementById(`opinion${channelId}`).disabled = true;
+    
+    url = baseUrl.concat('info');
+
+    const params = {
+        requestType: 'opinion',
+        channelType: 'channelId',
+        channelId: channelId,
+        search: 'none',
+    };
+    const urlWithParams = new URL(url);
+    urlWithParams.search = new URLSearchParams(params).toString();
+    const response = await fetch(urlWithParams);
+    const data = await response.json();
+    console.log(data.response);
+
+    document.getElementById(videoId).querySelector('.comments').innerText = data.response;
+    document.getElementById(`opinion${channelId}`).disabled = false;
+    document.getElementById(`opinion${channelId}`).textContent = "이 유튜버 여론 좀 알려다오.."
+}
+
+// async function init(videoId, comments) {
+//     document.getElementById(videoId).querySelector('.comments').innerHTML = `
+//         <ul class="comments">
+//             ${comments.map(comment => `<li>${comment}</li>`).join('')}
+//         </ul>
+//     `;
+//     document.getElementById(`init${videoId}`).disabled = false;
+//     document.getElementById(`init${videoId}`).textContent = "초기화해다오"
+// }

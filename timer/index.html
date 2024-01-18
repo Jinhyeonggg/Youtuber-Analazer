@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>DayDreaming</title>
+</head>
+
+<body>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="../opinion/opinion.html">Opinion</a>
+    <a href="#">Timer</a>
+  </nav>
+
+  <div class="title">
+    <h1>Enjoy Daydreaming</h1>
+  </div>
+  <div id="speakerContainer">
+    <div id="speakerIcon" onclick="toggleAudio()">
+      <i class="fas fa-volume-up"></i>
+    </div>
+    <audio id="jazz" src="./sources/jazz.mp3"></audio>
+    <div class="input-container">
+      <input type="number" id="minTime" placeholder="min (minutes)">
+      <input type="number" id="maxTime" placeholder="max (minutes)">
+    </div>
+
+    <button id="startBtn" onclick="startTimer()">Start</button>
+    <button id="showBtn" onclick="showTime()" disabled>Show</button>
+    <button id="resetBtn" onclick="resetTimer()" disabled>Reset</button>
+
+    <div class="timer-Info-Box">
+      <div id="timer-info">
+        <h1>
+          <p id="timeSet">Time Set: </p>
+        </h1>
+        <h1>
+          <p id="timePassed">Time Passed: </p>
+        </h1>
+      </div>
+    </div>
+    <div class="white-space"></div>
+
+    <audio id="drum" src="./sources/drum.mp3"></audio>
+
+    <div id="disqus_thread"></div>
+    <script src="script.js"></script>
+</body>
+
+</html>

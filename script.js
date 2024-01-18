@@ -1,112 +1,131 @@
-(function () { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://invisibletimer.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-})();
+// var baseUrl = 'http://127.0.0.1:5000/';
+var baseUrl = 'https://port-0-flask-1fk9002blr3j4h63.sel5.cloudtype.app/' 
 
-const jazz = document.getElementById('jazz');
-jazz.pause();
-let isPlaying = false;
+async function showNews() {
+    document.getElementById("showNews").disabled = true;
+    document.getElementById("showNews").innerText = "Loading..."
+    const newsContainer = document.getElementById('news-container');
 
-function toggleAudio() {
-    if (isPlaying) {
-        jazz.pause();
-    } else {
-        jazz.play();
+    var newsBoxes = document.querySelectorAll('.news-box');
+    newsBoxes.forEach(function (newsBox) {
+        newsBox.remove();
+    });
+
+    // const loadingMessage = document.getElementById('loading-message');
+    // loadingMessage.style.display = 'inline';
+
+    var category = document.getElementById('categoryButton').innerText;
+
+    const params = {
+        category: category
+    };
+    const urlWithParams = new URL(baseUrl);
+    urlWithParams.search = new URLSearchParams(params).toString();
+    const response = await fetch(urlWithParams);
+    const datas = await response.json();
+
+
+    datas.forEach(data => {
+        const videoId = data.videoId;
+        const title = data.title;
+        const channelTitle = data.channelTitle;
+        const comments = data.comments;
+        const tags = data.tags;
+        const hyperlink = data.hyperlink;
+        const channelId = data.channelId;
+        
+        const thumbnailURL = data.thumbnailURL;
+
+        const template = document.createElement('div');
+        template.className = 'news-box';
+        template.setAttribute('id', videoId);
+        template.innerHTML = `
+            <a href="${hyperlink}" id="${videoId}" class="title">${title}</a>
+            <div class="thumbnailNchannelNcomments">
+                <div class="thumbnailNchannel">
+                    <img class="thumbnail" src=${thumbnailURL}>
+                    <div class="channelTitle">Channel: ${channelTitle}</div>
+                    <button id="info${videoId}" onclick="info('${videoId}')">요약해다오</button>
+                    <button id="opinion${channelId}" onclick="opinion('${videoId}', '${channelId}')">이 유튜버 여론 좀 알려다오..</button>
+                </div>
+                <ul class="comments">
+                    ${comments.map(comment => `<li>${comment}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+        newsContainer.appendChild(template);
+
+        document.getElementById(videoId).addEventListener('click', function () {
+            this.href = hyperlink;
+        });
+    })
+
+    // loadingMessage.style.display = 'none';
+    document.getElementById("showNews").innerText = "Update!"
+
+    document.getElementById("showNews").disabled = false;
+}
+
+function changeCategory(category) {
+    document.getElementById('categoryButton').innerText = 'category: '.concat(category);
+}
+
+async function info(videoId) {
+    document.getElementById(`info${videoId}`).textContent = "로딩중...\n10초 이상 소요되니 기다려주세요.";
+    document.getElementById(`info${videoId}`).disabled = true;
+
+    const params = {
+        videoId: videoId,
+        requestType: 'summary',
+    };
+    const urlWithParams = new URL(baseUrl.concat('info'));
+    urlWithParams.search = new URLSearchParams(params).toString();
+    
+    const response = await fetch(urlWithParams);
+    const data = await response.json();
+    console.log(data.response);
+
+    document.getElementById(videoId).querySelector('.comments').innerText = data.response;
+    document.getElementById(`info${videoId}`).disabled = false;
+    document.getElementById(`info${videoId}`).textContent = "요약해다오"
+}
+
+async function opinion(videoId, channelId) {
+    document.getElementById(`opinion${channelId}`).textContent = "로딩중...\n10초 이상 소요되니 기다려주세요.";
+    document.getElementById(`opinion${channelId}`).disabled = true;
+    
+    try {
+        url = baseUrl.concat('info');
+
+        const params = {
+            requestType: 'opinion',
+            channelType: 'channelId',
+            channelId: channelId,
+            search: 'none',
+        };
+        const urlWithParams = new URL(url);
+        urlWithParams.search = new URLSearchParams(params).toString();
+        const response = await fetch(urlWithParams);
+        const data = await response.json();
+        console.log(data.response);
+
+        document.getElementById(videoId).querySelector('.comments').innerText = data.response;
+        document.getElementById(`opinion${channelId}`).disabled = false;
+        document.getElementById(`opinion${channelId}`).textContent = "이 유튜버 여론 좀 알려다오..";
     }
-
-    isPlaying = !isPlaying;
-}
-
-jazz.addEventListener('ended', function () {
-    jazz.currentTime = 0;
-    if (isPlaying) {
-        jazz.play();
-    }
-})
-
-let timer;
-let startTime;
-let endTime;
-function startTimer() {
-    resetTimer()
-    var minTime = +document.getElementById("minTime").value;
-    var maxTime = +document.getElementById("maxTime").value;
-    console.log(minTime);
-    console.log(maxTime);
-    console.log(typeof (maxTime));
-    if (minTime === "" || isNaN(minTime) || maxTime === "" || isNaN(maxTime) || minTime > maxTime || (minTime == 0 && maxTime == 0)) {
-        alert("Please enter valid time!");
-        return;
-    }
-    const randomTime = getRandomTime(minTime, maxTime);
-    startTime = new Date().getTime();
-    endTime = startTime + randomTime;
-
-    document.getElementById('timeSet').textContent = `Time Set: ${formatTime(randomTime)}`;
-    // document.getElementById('timer-info').style.display = 'none'; // Hide initially
-
-    document.getElementById('startBtn').style.backgroundColor = '#8BC34A'; // Change color to green
-
-    document.getElementById('showBtn').disabled = false;
-    document.getElementById('resetBtn').disabled = false;
-    if (!isPlaying){
-        jazz.play();
-        isPlaying = true;
-    }
-    updateRealTime();
-}
-
-function showTime() {
-    clearInterval(timer);
-    document.getElementById('timer-info').style.visibility = 'visible'; // Show after clicking "Show" button
-    updateElapsedTime(); // Update elapsed time immediately
-
-    // Continue updating elapsed time in real-time
-    timer = setInterval(updateElapsedTime, 1000);
-}
-
-function resetTimer() {
-    clearInterval(timer);
-    document.getElementById('timer-info').style.visibility = 'hidden';
-
-    document.getElementById('startBtn').style.backgroundColor = ''; // Reset color
-
-    document.getElementById('showBtn').disabled = true;
-    document.getElementById('resetBtn').disabled = true;
-}
-
-function updateRealTime() {
-    timer = setInterval(updateElapsedTime, 1000);
-}
-
-function updateElapsedTime() {
-    const elapsedTime = getElapsedTime();
-    document.getElementById('timePassed').textContent = `Time Passed: ${formatTime(elapsedTime)}`;
-
-    if (elapsedTime >= endTime - startTime) {
-        playAudio(); // Play audio when the timer is up
-        // Stop updating elapsed time and audio playback
-        clearInterval(timer);
+    catch (error) {
+        document.getElementById(videoId).querySelector('.comments').innerText = "에러가 발생했습니다."
+        document.getElementById(`opinion${channelId}`).disabled = false;
+        document.getElementById(`opinion${channelId}`).textContent = "이 유튜버 여론 좀 알려다오..";
     }
 }
 
-function getElapsedTime() {
-    return Math.floor((new Date().getTime() - startTime) / 1000);
-}
-
-function playAudio() {
-    const drum = document.getElementById('drum');
-    drum.play();
-}
-
-function getRandomTime(min, max) {
-    return Math.floor(60 * Math.random() * (max - min) + 60 * min);
-}
-
-function formatTime(totalSeconds) {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}min ${seconds}sec`;
-}
+// async function init(videoId, comments) {
+//     document.getElementById(videoId).querySelector('.comments').innerHTML = `
+//         <ul class="comments">
+//             ${comments.map(comment => `<li>${comment}</li>`).join('')}
+//         </ul>
+//     `;
+//     document.getElementById(`init${videoId}`).disabled = false;
+//     document.getElementById(`init${videoId}`).textContent = "초기화해다오"
+// }

@@ -34,15 +34,11 @@
         padding: 2px;
     }
 
-    .opinion-container {
-        display: none;
-        width: 60%;
-    }
-
     #opinion-container {
+        display: flex;
         margin-top: 2%;
-        font-size: 1.5em;
-        width: 60%;
+        font-size: 1em;
+        width: 40%;
     }
 </style>
 
@@ -53,8 +49,8 @@
         <a href="#">Services</a>
     </nav>
     <div id="container">
-        <h1>유튜버 여론 판독기입니다.</h1>
-        <h1>유튜버를 검색하고 실시간 여론을 확인하세요.</h1>
+        <h1>여론 판독기입니다.</h1>
+        <h1>유튜버 혹은 키워드를 검색하고 실시간 여론을 확인하세요.</h1>
         <div id="search-button">
             <input type="text" id='input' placeholder="Search Youtuber">
             <button id="opinion-button">search!</button>
@@ -63,21 +59,25 @@
     </div>
     <script>
         document.getElementById('opinion-button').addEventListener('click', async function() {
-            const search = document.getElementById('input').value;
-            var url = 'https://port-0-flask-1fk9002blr3j4h63.sel5.cloudtype.app/info' ;
-            const params = {
-                requestType: 'opinion',
-                channelType: 'channelSearch',
-                channelId: 'none',
-                search: search,
-            };
-            const urlWithParams = new URL(url);
-            urlWithParams.search = new URLSearchParams(params).toString();
-            const response = await fetch(urlWithParams);
-            const data = await response.json();
-            // var x = "hello"
-            document.getElementById('opinion-container').innerText = data.response;
-            document.getElementById('opinion-container').style.display = 'flex';
+            document.getElementById('opinion-container').innerText = "로딩 중입니다...";
+            try {
+                const search = document.getElementById('input').value;
+                var url = 'https://port-0-flask-1fk9002blr3j4h63.sel5.cloudtype.app/searchSummary' ;
+                // var url = 'http://127.0.0.1:5000/searchSummary'
+                const params = {
+                    search: search,
+                };
+                const urlWithParams = new URL(url);
+                urlWithParams.search = new URLSearchParams(params).toString();
+                console.log(params);
+                const response = await fetch(urlWithParams);
+                const data = await response.json();
+                // var x = "hello"
+                document.getElementById('opinion-container').innerText = data.response;
+            }
+            catch (error) {
+                document.getElementById('opinion-container').innerText = "에러가 발생했습니다."
+            }
         })
     </script>
 </body>

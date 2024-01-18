@@ -94,23 +94,30 @@ async function opinion(videoId, channelId) {
     document.getElementById(`opinion${channelId}`).textContent = "로딩중...\n10초 이상 소요되니 기다려주세요.";
     document.getElementById(`opinion${channelId}`).disabled = true;
     
-    url = baseUrl.concat('info');
+    try {
+        url = baseUrl.concat('info');
 
-    const params = {
-        requestType: 'opinion',
-        channelType: 'channelId',
-        channelId: channelId,
-        search: 'none',
-    };
-    const urlWithParams = new URL(url);
-    urlWithParams.search = new URLSearchParams(params).toString();
-    const response = await fetch(urlWithParams);
-    const data = await response.json();
-    console.log(data.response);
+        const params = {
+            requestType: 'opinion',
+            channelType: 'channelId',
+            channelId: channelId,
+            search: 'none',
+        };
+        const urlWithParams = new URL(url);
+        urlWithParams.search = new URLSearchParams(params).toString();
+        const response = await fetch(urlWithParams);
+        const data = await response.json();
+        console.log(data.response);
 
-    document.getElementById(videoId).querySelector('.comments').innerText = data.response;
-    document.getElementById(`opinion${channelId}`).disabled = false;
-    document.getElementById(`opinion${channelId}`).textContent = "이 유튜버 여론 좀 알려다오.."
+        document.getElementById(videoId).querySelector('.comments').innerText = data.response;
+        document.getElementById(`opinion${channelId}`).disabled = false;
+        document.getElementById(`opinion${channelId}`).textContent = "이 유튜버 여론 좀 알려다오..";
+    }
+    catch (error) {
+        document.getElementById(videoId).querySelector('.comments').innerText = "에러가 발생했습니다."
+        document.getElementById(`opinion${channelId}`).disabled = false;
+        document.getElementById(`opinion${channelId}`).textContent = "이 유튜버 여론 좀 알려다오..";
+    }
 }
 
 // async function init(videoId, comments) {

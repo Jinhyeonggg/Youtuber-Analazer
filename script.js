@@ -45,8 +45,8 @@ async function showNews() {
                 <div class="thumbnailNchannel">
                     <img class="thumbnail" src=${thumbnailURL}>
                     <div class="channelTitle">Channel: ${channelTitle}</div>
-                    <button id="info${videoId}" onclick="info('${videoId}')">요약해다오</button>
-                    <button id="opinion${channelId}" onclick="opinion('${videoId}', '${channelId}')">이 유튜버 여론 좀 알려다오..</button>
+                    <button id="info${videoId}" onclick="info('${videoId}')">요약</button>
+                    <button id="opinion${channelId}" onclick="opinion('${videoId}', '${channelId}')">유튜버 여론 확인</button>
                 </div>
                 <ul class="comments">
                     ${comments.map(comment => `<li>${comment}</li>`).join('')}
@@ -111,12 +111,12 @@ async function opinion(videoId, channelId) {
 
         document.getElementById(videoId).querySelector('.comments').innerText = data.response;
         document.getElementById(`opinion${channelId}`).disabled = false;
-        document.getElementById(`opinion${channelId}`).textContent = "이 유튜버 여론 좀 알려다오..";
+        document.getElementById(`opinion${channelId}`).textContent = "유튜버 여론 확인";
     }
     catch (error) {
         document.getElementById(videoId).querySelector('.comments').innerText = "에러가 발생했습니다."
         document.getElementById(`opinion${channelId}`).disabled = false;
-        document.getElementById(`opinion${channelId}`).textContent = "이 유튜버 여론 좀 알려다오..";
+        document.getElementById(`opinion${channelId}`).textContent = "유튜버 여론 확인";
     }
 }
 
